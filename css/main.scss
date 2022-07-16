@@ -1,0 +1,463 @@
+// imports the google font 'Montserrat' into the project
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+// gets rid of the default styling for all the elements and makes the font-family 'Montserrat'
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+// the 'body' tag becomes a grid and the two columns are auto and 404px in width
+body {
+    display: grid;
+    grid-template-columns: auto 404px; // the set width is for the sidebar
+    overflow-x: hidden; // the overflow-x is hidden to get rid of the extra space created by the image
+}
+
+// to hide the scrollbar its width is removed and the background is transparent
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+// mixin for the media screen breakpoints
+@mixin breakpoint ($minwidth, $maxwidth) {
+    @media screen and (min-width:$minwidth) and (max-width:$maxwidth) {
+        @content;
+    }
+}
+
+// mixin for placing the left elements in an exact spot in the screen
+@mixin bg-image($top, $right, $transform) {
+    position: absolute;
+    top: $top;
+    right: $right;
+    transform: $transform;
+}
+
+// mixin for the 'sweet' type; its the default-styling as its the first type shown on screen
+@mixin default-styling($first-bg, $second-bg) { // the 2 parameters is used to easily change the main colours
+    // the website was created from 1024px tp 1280px then 620px and finally, 480xpx
+
+    // the navigation bar is first hidden at the desktop views
+    .nav-bar {
+        display: none;
+    }
+    
+    // styling for the left-content
+    .left-content {
+        // margin gives the right gap for good design
+        margin: 30px 0 30px 30px;
+    
+        // both logos are given a box-shadow for effect and a border radius for the circle look
+        .logo, .logo-2 {
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.25);
+            border-radius: 100px;
+        }
+    
+        // the heading has a default display
+        .heading {
+            display: inherit;
+    
+            // at 1280px, the 'heading' class turns into a flexbox for the elements to all be in one line
+            @include breakpoint(1280px, 2000px) {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between; // pushes both elements to the ends of the container
+                align-items: baseline; //lines the texts vertically despite the difference in font-size
+            }
+        }
+    
+        // styles the h1
+        h1 {
+            margin-top: 55px;
+            font-size: 30px;
+            font-weight: bold;
+            color: $second-bg;
+
+            // changes the color to white at 620px to be seen in front of the custom rectangles
+            @include breakpoint(0px, 620px) {
+                color: white;
+            }
+        }
+    
+        // styles the h3
+        h3 {
+            margin-top: 15px;
+            font-size: 22px;
+            color: $first-bg;
+        }
+    
+        // styles the buttons
+        .buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 30px;
+        
+            // styles it as a flat design
+            button {
+                background: none;
+                border: none;
+                padding-bottom: 6px;
+                font-size: 18px;
+                color: $first-bg;
+            }
+        
+            // visual feedback for the user to know which button they're hovering
+            button:hover {
+                border-bottom: 2px solid;
+                margin-bottom: -2px;
+                color: $second-bg;
+            }
+    
+            // allows the savory button to be in line with the width of the card container
+            .savory-btn {
+                margin-right: 90px;
+            }
+        }
+    
+        // at 1280px there is a breakpoint to put the elements in the same line using flexbox
+        @include breakpoint(1280px, 2000px) {
+            .option {
+                display: flex;
+                column-gap: 30px;
+                align-items: baseline;
+            }
+        }
+    
+        // styles the footer
+        footer {
+            margin-top: 100px;
+            color: $first-bg;
+            font-size: 12px;
+            text-align: center;
+        }
+    }
+    
+    // styles the 'sweets' and 'savory-desserts' classes
+    .sweets, .savory-desserts {
+        margin: 30px 10px 0 0;
+
+        // the entire gallery is a flexbox used to responsively handle different screen-sizes
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 15px;
+        row-gap: 80px;
+    
+        // the 'dessert' class sets a default height and width for the entire container
+        .dessert {
+            width: 180px;
+            height: 240px;
+    
+            // the 'dessert-inner' styles the front and back of the card as well as gives animation
+            .dessert-inner {
+                transition: transform 0.8s; // flips the card smoothly with an animation
+                transform-style: preserve-3d;
+                position: relative;
+                width: 100%;
+                height: 100%;
+                text-align: center;
+    
+                // when the card is hovered, it will rotate to a 180degrees revealing the back
+                &:hover {
+                    transform: rotateY(180deg);
+                }
+    
+                // styles both the 'dessert-front' and 'dessert-back' classes
+                .dessert-front, .dessert-back {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    backface-visibility: hidden; //hides the back face of the card (its information) unless hovered over
+                    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.25);
+                    border-radius: 10px;
+                }
+    
+                // the image in the front of the card has a 100% width and height to fill the container
+                .dessert-front {
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 10px;
+                        object-fit: cover; // used to keep the aspect ratio of the images
+                    }
+                }
+    
+                // styles the 'dessert-back' class
+                .dessert-back {
+                    background-color: $first-bg;
+                    border-radius: 10px;
+                    transform: rotateY(180deg); //rotates the back to the front when hovered
+                    color: white;
+    
+                    p {
+                        margin: 10px;
+                        font-size: 15px;
+                    }
+                }
+            }
+    
+            // styles the name of the dessert and its place of origin
+            .dessert-outer {
+                h4 {
+                    margin-top: 15px;
+                    font-size: 20px;
+                    color: $first-bg;
+                }
+        
+                h5 {
+                    font-size: 18px;
+                    font-weight: normal;
+                    color: $second-bg;
+                }
+            }
+        }
+
+        // at 480px there is an extra 15px margin to the left to equalize the white space on both sides
+        @include breakpoint(0px, 480px) {
+            margin-left: 15px;
+        }
+    }
+    
+    // styles the 'right-content' class
+    .right-content {
+        background-color: $second-bg;
+        border-radius: 30px 0 0 30px;
+    
+        ul {
+            margin: 70px 15px 0 0;
+            background-color: $second-bg;
+            border-radius: 30px 0 0 0;
+            list-style-type: none;
+    
+            display: flex;
+            justify-content: flex-end; // aligns the navigation links to the same line
+    
+            // styles the text
+            a {
+                margin: 15px;
+                padding-bottom: 6px;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 16px;
+                color: white;
+            }
+    
+            // adds the visual feedback when they hover over the links
+            a:hover {
+                border-bottom: 2px solid;
+                margin-bottom: -2px;
+            }
+        }
+    }
+    
+    // adds the background images exact position on the screen and rotates them accordingly
+    .bg-1 {
+        @include bg-image(120px, -30px, rotate(12deg));
+    }
+    .bg-2 {
+        @include bg-image(310px, 60px, rotate(-5deg));
+    }
+    .bg-3 {
+        @include bg-image(686px, 180px, rotate(-10deg));
+
+        // there is a breakpoint for the 3rd illustration as it'll be used below 620px
+        @include breakpoint(0px, 620px) {
+            z-index: -1; // places it behind the gallery of desserts
+            @include bg-image(150px, 20px, rotate(-10deg));
+            width: 252px;
+            height: 162px;
+        }
+
+        // hides the illustration below 480px
+        @include breakpoint(0px, 480px) {
+            display: none;
+        }
+    }
+    
+    // hides the custom rectangle at desktop view
+    .custom-rect {
+        display: none;
+
+        // displays it at below 620px
+        @include breakpoint(0px, 620px) {
+            z-index: -2; //places it behind the images and the illustration
+            position: absolute;
+            display: block;
+            top: 0;
+            width: 620px; //sets an exact width so its similar to the mock-up
+        }
+    }
+
+    // styles the tablet view
+    @include breakpoint(0px, 620px) {
+        display: inline; //shows every element
+
+        // hides some elements
+        .left-content .option, .right-content, .bg-1, .bg-2 {
+            display: none;
+        }
+
+        // shows the navigation bar
+        .nav-bar {
+            display: block; // sets the display from none to block
+
+            // styles all the elements inside the 'nav-bar' class
+            * {
+                color: $first-bg;
+
+                // hides every other element except the first child (hamburger icon)
+                &:not(:first-child) {
+                    display: none;
+                }
+            }
+        
+            // styles the container of the hamburger icon
+            .icon {
+                margin: 40px 30px 0 0;
+                display: absolute;
+                float: right;
+                color: white;
+            }
+        
+            // styles the hamburger icon
+            .fa {
+                transform: scale(2, 2);
+                color: white;
+            }
+        
+            // hides the close icon
+            .fa-times {
+                display: none;
+            }
+        
+            // styles when the hamburger icon is clicked
+            &.res {
+                @include bg-image(0, 0, rotate(0deg)); // sets the position to absolute and at the top right
+                z-index: 3; // sets the z index to be higher than all the other elements
+        
+                // displays all the elements except the first element (the hamburger icon)
+                * {
+                    &:not(:first-child) {
+                        display: block;
+                    }
+                }
+        
+                // hides the hamburger icon
+                .fa-bars {
+                    display: none;
+                }
+        
+                // styles the close icon
+                .fa-times {
+                    display: block;
+                    position: absolute;
+                    top: 80px;
+                    left: 52px;
+                    color: $first-bg;
+            
+                    &:hover {
+                        color: $second-bg;
+                    }
+                }
+        
+                // styles the 'hidden' elements
+                .hidden {
+                    display: block;
+                    width: 120px;
+                    min-height: 1040px;
+                    background-color: white;
+                    border: 2px solid $first-bg;
+                    border-radius: 30px 0px 0px 30px;
+                    color: #666d75;
+                    font-weight: bold;
+                    font-size: 20px;
+                }
+        
+                // styles the navigation links
+                .nav-ul ul {
+                    list-style-type: none;
+            
+                    li {
+                        a {
+                            text-decoration: none;
+                        }
+            
+                        a:hover {
+                            border-bottom: 2px solid;
+                            margin-bottom: -2px;
+                            color: $second-bg;
+                        }
+                    }
+            
+                    // positions both links at the exact spot
+                    li:first-child { @include bg-image(190px, 20px, rotate(90deg)); }
+                    li:last-child { @include bg-image(350px, 8px, rotate(90deg)); }
+                }
+        
+                // positions the illustration at the exact spot
+                .nav-bg-1 {
+                    @include bg-image(470px, 5px, rotate(12deg));
+                }
+
+                // styles the type buttons
+                .nav-buttons {
+                    h3 {
+                        font-size: 25px;
+                        @include bg-image(600px, 29px, rotate(90deg));
+                    }
+            
+                    button {
+                        background-color: transparent;
+                        border: none;
+                        font-size: 18px;
+                    }
+                    button:hover {
+                        border-bottom: 2px solid;
+                        margin-bottom: -2px;
+                        color: $second-bg;
+                    }
+            
+                    // positions the buttons at the exact spot
+                    .sweet-btn { @include bg-image(740px, 35px, rotate(90deg)); }
+                    .savory-btn { @include bg-image(840px, 30px, rotate(90deg)); }
+                }
+            }
+        }
+    }
+}
+
+// this sets the main colours and hides certain elements when the type is sweet
+.type-sweet {
+    @include default-styling(#A6CFFF,#FFDD7D);
+    .savory, .savory-desserts, .logo-2 {
+        display: none
+    }
+}
+
+// this sets the main colours, hides certain elements, displays certain elements and adds the breakpoints when the type is savory
+.type-savory {
+    @include default-styling(#73956F, #E87461);
+    .sweet, .sweets, .logo {
+        display: none;
+    }
+    .savory {
+        display: block;
+
+        .bg-1 {
+            @include bg-image(580px, 120px, rotate(-10deg));
+        }
+        .bg-2 {
+            @include bg-image(310px, 120px, rotate(-5deg));
+        }
+        .bg-3 {
+            @include bg-image(120px, -60px, rotate(12deg));
+
+            @include breakpoint(0px, 620px) {
+                top: 150px;
+                right: 15px;
+            }
+        }
+    }
+}
